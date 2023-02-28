@@ -2,6 +2,9 @@ package com.example.fullstackcurd.controller;
 
 import com.example.fullstackcurd.dto.requestDTO.UserSaveRequestDTO;
 import com.example.fullstackcurd.dto.responseDTO.UserSaveResponseDTO;
+import com.example.fullstackcurd.entity.User;
+import com.example.fullstackcurd.exception.UserNotFoundException;
+import com.example.fullstackcurd.repository.UserRepo;
 import com.example.fullstackcurd.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +19,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepo userRepo;
+
     @PostMapping(path = "/addUser")
     public String saveUser(@RequestBody UserSaveRequestDTO userSaveRequestDTO){
         String id = userService.addUser(userSaveRequestDTO);
@@ -26,6 +32,12 @@ public class UserController {
     public List <UserSaveResponseDTO> getUser(){
         List <UserSaveResponseDTO> userSaveResponseDTO = userService.getUser();
         return  userSaveResponseDTO;
+    }
+
+    @GetMapping("/user/{id}")
+    User getUserById(@PathVariable int id) {
+        return userRepo.findById(id)
+                .orElseThrow(()->new UserNotFoundException(id));
     }
 
 }
