@@ -28,6 +28,7 @@ public class UserServiceIMPL implements UserService {
                 userSaveRequestDTO.getEmail(),
                 true
         );
+
         userRepo.save(user);
         return user.getName()+" add user";
     }
